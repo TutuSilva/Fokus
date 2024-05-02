@@ -4,6 +4,10 @@ const longoBtn = document.querySelector(".api-botoes-longo");
 const todosBotoes = document.querySelectorAll(".botoes");
 const inputMusica = document.querySelector("#alternar-musica");
 const musica = new Audio("exercicios/luna-rise-part-one.mp3");
+const musicaStart = new Audio("exercicios/play.wav");
+const musicaPausa = new Audio("exercicios/pause.mp3");
+let tempoBase = 10;
+let intervaloBase = null;
 
 focoBtn.addEventListener("click", () => {
   alterarContexto("foco");
@@ -30,3 +34,29 @@ inputMusica.addEventListener("change", () => {
     musica.pause();
   }
 });
+
+const contagemRegressiva = () => {
+  if (tempoBase <= 0) {
+    zerarContador();
+    return;
+  }
+  tempoBase -= 1;
+  console.log(tempoBase);
+};
+
+inputMusica.addEventListener("click", iniciarPausar);
+
+function iniciarPausar() {
+  if (intervaloBase) {
+    musicaPausa.play();
+    zerarContador();
+    return;
+  }
+  musicaStart.play();
+  intervaloBase = setInterval(contagemRegressiva, 1000);
+}
+
+function zerarContador() {
+  clearInterval(intervaloBase);
+  intervaloBase = null;
+}
